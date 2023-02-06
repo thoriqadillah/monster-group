@@ -1,6 +1,4 @@
 # Techinical Assessment PT. Monster Group
-Berikut adalah project hasil pengerjaan soal no 1
-
 ## Langkah untuk melakukan percobaan
 ### Requirement
 - MySQL
