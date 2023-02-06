@@ -9,18 +9,20 @@ import (
 )
 
 type productDAO struct {
-	ctx context.Context
-	db  *sql.DB
+	ctx     context.Context
+	db      *sql.DB
+	product model.Product
 }
 
 func NewDAO(ctx context.Context, db *sql.DB) productDAO {
 	return productDAO{
-		ctx: ctx,
-		db:  db,
+		ctx:     ctx,
+		db:      db,
+		product: model.Product{},
 	}
 }
 
-func (p *productDAO) GetAll(product *model.Product) ([]model.Product, error) {
+func (p *productDAO) GetAll() ([]model.Product, error) {
 	query := "SELECT id, name, price, category, brand FROM products"
 	rows, err := p.db.QueryContext(p.ctx, query)
 	if err != nil {
@@ -30,12 +32,12 @@ func (p *productDAO) GetAll(product *model.Product) ([]model.Product, error) {
 	var products []model.Product
 
 	for rows.Next() {
-		err := rows.Scan(&product.Id, &product.Name, &product.Price, &product.Category, &product.Brand)
+		err := rows.Scan(&p.product.Id, &p.product.Name, &p.product.Price, &p.product.Category, &p.product.Brand)
 		if err != nil {
 			return nil, err
 		}
 
-		products = append(products, *product)
+		products = append(products, p.product)
 	}
 
 	defer rows.Close()

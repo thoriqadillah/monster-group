@@ -6,7 +6,6 @@ import (
 
 	"github.com/thoriqadillah/monster-group/dao/product"
 	"github.com/thoriqadillah/monster-group/database"
-	"github.com/thoriqadillah/monster-group/model"
 )
 
 func main() {
@@ -16,19 +15,14 @@ func main() {
 
 	product := product.NewDAO(ctx, db)
 
-	// Get all products
-	var productModel model.Product
-	products, _ := product.GetAll(&productModel)
-
+	products, _ := product.GetAll() // Get all products
 	fmt.Println(products)
 
-	// Update price based on pricelist
-	err := product.UpdatePrice()
+	err := product.UpdatePrice() // Update price based on pricelist
 	if err != nil {
 		panic(err)
 	}
 
-	updatedProducts, _ := product.GetAll(&productModel)
-
+	updatedProducts, _ := product.GetAll()
 	fmt.Println(updatedProducts)
 }

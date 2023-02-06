@@ -7,7 +7,6 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/thoriqadillah/monster-group/database"
-	"github.com/thoriqadillah/monster-group/model"
 )
 
 func TestGetAll(t *testing.T) {
@@ -17,8 +16,7 @@ func TestGetAll(t *testing.T) {
 
 	product := NewDAO(ctx, db)
 
-	var model model.Product
-	products, err := product.GetAll(&model)
+	products, err := product.GetAll()
 	if err != nil {
 		panic(err)
 	}

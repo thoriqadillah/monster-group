@@ -9,18 +9,20 @@ import (
 )
 
 type pricelistDAO struct {
-	ctx context.Context
-	db  *sql.DB
+	ctx       context.Context
+	db        *sql.DB
+	pricelist model.Pricelist
 }
 
 func NewModel(ctx context.Context, db *sql.DB) pricelistDAO {
 	return pricelistDAO{
-		ctx: ctx,
-		db:  db,
+		ctx:       ctx,
+		db:        db,
+		pricelist: model.Pricelist{},
 	}
 }
 
-func (p *pricelistDAO) GetAll(pricelist *model.Pricelist) ([]model.Pricelist, error) {
+func (p *pricelistDAO) GetAll() ([]model.Pricelist, error) {
 	query := "SELECT id, price, category, brand FROM pricelists"
 	rows, err := p.db.QueryContext(p.ctx, query)
 	if err != nil {
@@ -30,12 +32,12 @@ func (p *pricelistDAO) GetAll(pricelist *model.Pricelist) ([]model.Pricelist, er
 	var pricelists []model.Pricelist
 
 	for rows.Next() {
-		err := rows.Scan(&pricelist.Id, &pricelist.Price, &pricelist.Category, &pricelist.Brand)
+		err := rows.Scan(&p.pricelist.Id, &p.pricelist.Price, &p.pricelist.Category, &p.pricelist.Brand)
 		if err != nil {
 			return nil, err
 		}
 
-		pricelists = append(pricelists, *pricelist)
+		pricelists = append(pricelists, p.pricelist)
 	}
 
 	defer rows.Close()

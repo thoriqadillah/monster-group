@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/thoriqadillah/monster-group/database"
-	"github.com/thoriqadillah/monster-group/model"
 )
 
 func TestGetAll(t *testing.T) {
@@ -16,8 +15,7 @@ func TestGetAll(t *testing.T) {
 
 	pricelist := NewModel(ctx, db)
 
-	var model model.Pricelist
-	pricelists, err := pricelist.GetAll(&model)
+	pricelists, err := pricelist.GetAll()
 	if err != nil {
 		panic(err)
 	}
