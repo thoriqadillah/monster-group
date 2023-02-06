@@ -1,8 +1,8 @@
 package model
 
 type Pricelist struct {
-	Id       int    `json:"ID"`
-	Category string `json:"Category"`
-	Brand    string `json:"Brand"`
-	Price    int    `json:"Price"`
+	Id       int
+	Category string
+	Brand    string
+	Price    int
 }
