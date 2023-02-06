@@ -2,11 +2,22 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
 	"time"
 )
 
 func NewConnection() *sql.DB {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/monster_group")
+	var (
+		USERNAME = os.Getenv("DB_USERNAME")
+		PASSWORD = os.Getenv("DB_PASSWORD")
+		HOST     = os.Getenv("DB_HOST")
+		SCHEMA   = os.Getenv("DB_SCHEMA")
+	)
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s", USERNAME, PASSWORD, HOST, SCHEMA)
+
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		panic(err)
 	}

@@ -1,28 +1,78 @@
 package main
 
 import (
-	"context"
+	"encoding/json"
 	"fmt"
-
-	"github.com/thoriqadillah/monster-group/dao/product"
-	"github.com/thoriqadillah/monster-group/database"
 )
 
+type Products struct {
+	ID         int
+	Name       string
+	Pricelists Pricelists
+}
+
+type Pricelists struct {
+	ID       int
+	Category string
+	Brand    string
+	Price    int
+}
+
+var jsonSample = `
+[
+  {
+    "ID": 1,
+    "Name": "Pena Hitam",
+    "Price": 0,
+    "Pricelists": {
+      "ID": 1,
+      "Category": "pena",
+      "Brand": "bagus"
+    }
+  },
+  {
+    "ID": 2,
+    "Name": "Pena Hitam",
+    "Price": 0,
+    "Pricelists": {
+      "ID": 1,
+      "Category": "pena",
+      "Brand": "laris"
+    }
+  }
+]
+`
+
 func main() {
-	ctx := context.Background()
-	db := database.NewConnection()
-	defer db.Close()
+	soal1()
 
-	product := product.NewDAO(ctx, db)
+	mapArr := getMaps()
+	if bte, e := json.Marshal(mapArr); nil == e {
+		fmt.Println(string(bte))
+	}
+}
 
-	products, _ := product.GetAll() // Get all products
-	fmt.Println(products)
-
-	err := product.UpdatePrice() // Update price based on pricelist
-	if err != nil {
-		panic(err)
+func getMaps() map[string]map[string]string {
+	var products []Products
+	output := map[string]map[string]string{}
+	if e := json.Unmarshal([]byte(jsonSample), &products); nil != e {
+		panic(e)
 	}
 
-	updatedProducts, _ := product.GetAll()
-	fmt.Println(updatedProducts)
+	for i := range products {
+		productToMapItem(products[i], output)
+	}
+
+	return output
+}
+
+func productToMapItem(product Products, output map[string]map[string]string) {
+	category := product.Pricelists.Category
+	brand := product.Pricelists.Brand
+
+	if len(output[category]) == 0 {
+		output[category] = map[string]string{}
+	}
+
+	output[category][brand] = product.Name
 }
