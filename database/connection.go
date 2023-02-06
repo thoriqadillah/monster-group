@@ -2,15 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"os"
 	"time"
-)
-
-var (
-	USERNAME = os.Getenv("DB_USERNAME")
-	PASSWORD = os.Getenv("DB_PASSWORD")
-	HOST     = os.Getenv("DB_HOST")
-	SCHEMA   = os.Getenv("DB_SCHEMA")
 )
 
 func NewConnection() *sql.DB {
