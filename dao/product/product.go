@@ -5,23 +5,22 @@ import (
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/thoriqadillah/monster-group/database"
 	"github.com/thoriqadillah/monster-group/model"
 )
 
-type product struct {
+type productDAO struct {
 	ctx context.Context
 	db  *sql.DB
 }
 
-func NewDAO(ctx context.Context, db *sql.DB) product {
-	return product{
+func NewDAO(ctx context.Context, db *sql.DB) productDAO {
+	return productDAO{
 		ctx: ctx,
 		db:  db,
 	}
 }
 
-func (p *product) GetAll(product *model.Product) ([]model.Product, error) {
+func (p *productDAO) GetAll(product *model.Product) ([]model.Product, error) {
 	query := "SELECT id, name, price, category, brand FROM products"
 	rows, err := p.db.QueryContext(p.ctx, query)
 	if err != nil {
@@ -45,12 +44,9 @@ func (p *product) GetAll(product *model.Product) ([]model.Product, error) {
 }
 
 // Update price based on pricelist
-func (p *product) UpdatePrice() error {
-	db := database.NewConnection()
-	defer db.Close()
-
+func (p *productDAO) UpdatePrice() error {
 	query := "UPDATE products INNER JOIN pricelists ON products.category = pricelists.category AND products.brand = pricelists.brand SET products.price = pricelists.price;"
-	_, err := db.ExecContext(p.ctx, query)
+	_, err := p.db.ExecContext(p.ctx, query)
 	if err != nil {
 		return err
 	}

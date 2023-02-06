@@ -8,19 +8,19 @@ import (
 	"github.com/thoriqadillah/monster-group/model"
 )
 
-type pricelist struct {
+type pricelistDAO struct {
 	ctx context.Context
 	db  *sql.DB
 }
 
-func NewModel(ctx context.Context, db *sql.DB) pricelist {
-	return pricelist{
+func NewModel(ctx context.Context, db *sql.DB) pricelistDAO {
+	return pricelistDAO{
 		ctx: ctx,
 		db:  db,
 	}
 }
 
-func (p *pricelist) GetAll(pricelist *model.Pricelist) ([]model.Pricelist, error) {
+func (p *pricelistDAO) GetAll(pricelist *model.Pricelist) ([]model.Pricelist, error) {
 	query := "SELECT id, price, category, brand FROM pricelists"
 	rows, err := p.db.QueryContext(p.ctx, query)
 	if err != nil {
